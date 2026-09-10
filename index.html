@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎵 POP SONG QUIZ</title>
+
+<title>POP SONG QUIZ</title>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
@@ -18,16 +20,45 @@ body {
   text-align: center;
 }
 
-h1 {
-  font-size: 36px;
+/* 모든 화면 */
+.screen {
+  display: none;
+  max-width: 950px;
+  margin: auto;
 }
 
+.screen.active {
+  display: block;
+}
+
+/* 제목 */
+h1 {
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+h2 {
+  margin: 10px 0;
+}
+
+/* 입력 */
+input {
+  padding: 14px;
+  font-size: 18px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+  width: 70%;
+  max-width: 500px;
+}
+
+/* 버튼 */
 button {
-  padding: 12px 18px;
-  margin: 5px;
+  padding: 13px 20px;
+  margin: 6px;
   border: none;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 17px;
   cursor: pointer;
 }
 
@@ -35,118 +66,138 @@ button:hover {
   transform: scale(1.04);
 }
 
-input {
-  padding: 12px;
-  font-size: 17px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  width: 70%;
-}
-
-.setup,
-.game {
-  max-width: 950px;
-  margin: auto;
-}
-
-.game {
-  display: none;
-}
-
-.add {
+/* 팀 추가 */
+.addButton {
   background: #4caf50;
   color: white;
 }
 
-.start {
+/* 시작 */
+.startButton {
   background: #222;
   color: white;
   font-size: 20px;
   padding: 15px 30px;
 }
 
-.youtube {
+/* 유튜브 */
+.youtubeButton {
   background: #ff0000;
   color: white;
 }
 
-.answer {
+/* 정답 확인 */
+.answerButton {
   background: #2196f3;
   color: white;
 }
 
-.boom {
-  background: #ff5722;
-  color: white;
-}
-
-.next {
+/* 다음 팀 */
+.nextButton {
   background: #673ab7;
   color: white;
 }
 
+/* 꽝 */
+.boomButton {
+  background: #ff5722;
+  color: white;
+}
+
+/* 팀 목록 */
 .teamBox {
   display: inline-block;
   background: white;
-  padding: 10px 18px;
-  margin: 5px;
+  padding: 12px 20px;
+  margin: 6px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px #ccc;
+  box-shadow: 0 2px 7px #ccc;
+  font-size: 17px;
 }
 
-#turn {
-  font-size: 25px;
+/* 현재 팀 */
+.turn {
+  font-size: 26px;
   font-weight: bold;
-  margin: 20px;
+  margin: 20px 0;
 }
 
+/* 게임 보드 */
 #board {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   gap: 10px;
-  margin: 20px auto;
+  margin: 25px auto;
 }
 
+/* 번호 */
 .cell {
   background: white;
   border: 3px solid #333;
   border-radius: 12px;
-  padding: 22px 5px;
-  font-size: 22px;
+  padding: 25px 5px;
+  font-size: 23px;
   font-weight: bold;
   cursor: pointer;
+  user-select: none;
+}
+
+.cell:hover {
+  background: #ddd;
+  transform: scale(1.04);
 }
 
 .cell.used {
   background: #aaa;
   color: #666;
   cursor: default;
+  transform: none;
 }
 
-#questionArea {
-  display: none;
+/* 답변 화면 */
+.questionBox {
   background: white;
   max-width: 650px;
-  margin: 25px auto;
-  padding: 25px;
-  border-radius: 18px;
-  box-shadow: 0 3px 12px #ccc;
+  margin: 40px auto;
+  padding: 35px 25px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px #ccc;
 }
 
-#result {
-  min-height: 100px;
-  margin: 20px;
-  font-size: 27px;
+.numberTitle {
+  font-size: 30px;
   font-weight: bold;
-  line-height: 1.7;
+  margin-bottom: 25px;
 }
 
-#scoreboard {
-  margin-top: 25px;
-  padding: 20px;
+/* 정답 입력 */
+#answerInput {
+  width: 85%;
+  margin: 15px 0;
+}
+
+/* 결과 */
+#result {
+  min-height: 150px;
+  margin: 25px 0;
+  font-size: 25px;
+  font-weight: bold;
+  line-height: 1.8;
+}
+
+/* 정답 강조 */
+.correctAnswer {
+  font-size: 30px;
+  margin-top: 15px;
+}
+
+/* 점수판 */
+.scoreBoard {
   background: white;
+  padding: 20px;
   border-radius: 18px;
   box-shadow: 0 3px 10px #ccc;
+  margin-top: 25px;
 }
 
 .scoreRow {
@@ -154,11 +205,12 @@ input {
   justify-content: space-between;
   background: #eee;
   padding: 12px 18px;
-  margin: 7px;
+  margin: 7px 0;
   border-radius: 10px;
   font-size: 20px;
 }
 
+/* 큰 점수 효과 */
 #effect {
   position: fixed;
   inset: 0;
@@ -166,56 +218,68 @@ input {
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.94);
   font-size: 75px;
   font-weight: bold;
 }
 
-#gameEnd {
-  display: none;
+/* 게임 종료 */
+#finalScores {
   background: white;
-  max-width: 650px;
-  margin: 30px auto;
-  padding: 30px;
+  padding: 25px;
   border-radius: 20px;
   box-shadow: 0 3px 12px #ccc;
+  font-size: 22px;
+  line-height: 1.8;
 }
 
+/* 모바일 */
 @media(max-width:700px) {
 
   #board {
     grid-template-columns: repeat(5, 1fr);
+    gap: 7px;
   }
 
   .cell {
-    padding: 18px 3px;
+    padding: 20px 3px;
     font-size: 19px;
   }
 
   input {
     width: 90%;
   }
+
+  h1 {
+    font-size: 30px;
+  }
+
 }
+
 </style>
 </head>
 
+
 <body>
 
-<!-- =========================
-     시작 화면
-========================= -->
 
-<div class="setup" id="setup">
+<!-- ==================================================
+     시작 화면
+================================================== -->
+
+<div id="startScreen" class="screen active">
 
   <h1>🎵 POP SONG QUIZ 🎵</h1>
 
-  <p>🎵 35곡 + 💥 꽝 5개 = 총 40칸</p>
+  <p>35곡 + 꽝 5개 = 총 40칸</p>
 
   <p>
-    ✅ 정답 +2점　
-    ❌ 오답 0점　
-    💥 꽝 -1점
+    ✅ 정답 +2점
+   　❌ 오답 0점
+   　💥 꽝 -1점
   </p>
+
+  <br>
 
   <input
     id="teamInput"
@@ -223,7 +287,10 @@ input {
     placeholder="팀 이름 입력"
   >
 
-  <button class="add" onclick="addTeam()">
+  <button
+    class="addButton"
+    onclick="addTeam()"
+  >
     👥 팀 추가
   </button>
 
@@ -231,42 +298,72 @@ input {
 
   <br><br>
 
-  <button class="start" onclick="startGame()">
+  <button
+    class="startButton"
+    onclick="startGame()"
+  >
     🎮 게임 시작
   </button>
 
 </div>
 
 
-<!-- =========================
-     게임 화면
-========================= -->
 
-<div class="game" id="game">
+<!-- ==================================================
+     번호판 화면
+================================================== -->
+
+<div id="boardScreen" class="screen">
 
   <h1>🎵 POP SONG QUIZ 🎵</h1>
 
-  <div id="turn"></div>
+  <div
+    id="turnText"
+    class="turn"
+  ></div>
 
   <div id="board"></div>
 
+  <div class="scoreBoard">
 
-  <!-- 문제 -->
-  <div id="questionArea">
+    <h2>🏆 점수판</h2>
 
-    <h2 id="numberText"></h2>
+    <div id="scores"></div>
 
-    <button
-      class="youtube"
-      id="youtubeButton"
-      onclick="openYouTube()"
-    >
-      ▶️ 유튜브에서 노래 듣기
-    </button>
+  </div>
 
-    <div id="normalArea">
+</div>
 
-      <br><br>
+
+
+<!-- ==================================================
+     답변 화면
+================================================== -->
+
+<div id="questionScreen" class="screen">
+
+  <div class="questionBox">
+
+    <div
+      id="questionNumber"
+      class="numberTitle"
+    ></div>
+
+    <div id="songArea">
+
+      <p>
+        🎧 노래를 듣고 제목을 맞혀보세요!
+      </p>
+
+      <button
+        id="youtubeButton"
+        class="youtubeButton"
+        onclick="openYouTube()"
+      >
+        ▶️ 유튜브에서 노래 듣기
+      </button>
+
+      <br>
 
       <input
         id="answerInput"
@@ -278,7 +375,7 @@ input {
       <br>
 
       <button
-        class="answer"
+        class="answerButton"
         onclick="checkAnswer()"
       >
         ✅ 정답 확인
@@ -286,15 +383,41 @@ input {
 
     </div>
 
-    <div id="boomArea"></div>
 
-    <!-- 정답 표시 -->
+    <!-- 꽝 화면 -->
+
+    <div
+      id="boomArea"
+      style="display:none;"
+    >
+
+      <div style="font-size:60px;">
+        💥
+      </div>
+
+      <h2>꽝!</h2>
+
+      <button
+        class="boomButton"
+        onclick="boomAnswer()"
+      >
+        💥 꽝 처리 (-1점)
+      </button>
+
+    </div>
+
+
+    <!-- 결과 -->
+
     <div id="result"></div>
 
+
+    <!-- 다음 팀 -->
+
     <button
-      class="next"
       id="nextButton"
-      onclick="nextTurn()"
+      class="nextButton"
+      onclick="goNextTurn()"
       style="display:none;"
     >
       ➡️ 다음 팀
@@ -302,137 +425,197 @@ input {
 
   </div>
 
-
-  <!-- 점수판 -->
-  <div id="scoreboard">
-
-    <h2>🏆 점수판</h2>
-
-    <div id="scores"></div>
-
-  </div>
+</div>
 
 
-  <!-- 게임 종료 -->
-  <div id="gameEnd">
 
-    <h2>🏆 게임 종료!</h2>
+<!-- ==================================================
+     게임 종료
+================================================== -->
 
-    <div id="winnerText"></div>
+<div id="endScreen" class="screen">
 
-  </div>
+  <h1>🏆 게임 종료!</h1>
+
+  <div id="winner"></div>
+
+  <div id="finalScores"></div>
 
 </div>
 
 
-<!-- 큰 효과 -->
+
+<!-- 큰 점수 효과 -->
+
 <div id="effect"></div>
+
 
 
 <script>
 
-/* =========================
+
+/* ==================================================
    노래 35곡
-========================= */
+================================================== */
 
 const songs = [
 
   ["Shape of You", "Ed Sheeran"],
+
   ["Believer", "Imagine Dragons"],
+
   ["Counting Stars", "OneRepublic"],
+
   ["Perfect", "Ed Sheeran"],
+
   ["Love Yourself", "Justin Bieber"],
+
   ["Sorry", "Justin Bieber"],
+
   ["What Makes You Beautiful", "One Direction"],
+
   ["Sugar", "Maroon 5"],
+
   ["Girls Like You", "Maroon 5"],
+
   ["Memories", "Maroon 5"],
+
   ["Attention", "Charlie Puth"],
+
   ["We Don't Talk Anymore", "Charlie Puth"],
+
   ["See You Again", "Wiz Khalifa"],
+
   ["Stay", "The Kid LAROI & Justin Bieber"],
+
   ["Dance Monkey", "Tones and I"],
+
   ["Bad Guy", "Billie Eilish"],
+
   ["As It Was", "Harry Styles"],
+
   ["Watermelon Sugar", "Harry Styles"],
+
   ["Blinding Lights", "The Weeknd"],
+
   ["Save Your Tears", "The Weeknd"],
+
   ["Levitating", "Dua Lipa"],
+
   ["New Rules", "Dua Lipa"],
+
   ["Don't Start Now", "Dua Lipa"],
+
   ["Havana", "Camila Cabello"],
+
   ["Senorita", "Shawn Mendes & Camila Cabello"],
+
   ["Cheap Thrills", "Sia"],
+
   ["Roar", "Katy Perry"],
+
   ["Firework", "Katy Perry"],
+
   ["Shake It Off", "Taylor Swift"],
+
   ["Blank Space", "Taylor Swift"],
+
   ["Anti-Hero", "Taylor Swift"],
+
   ["Uptown Funk", "Mark Ronson ft. Bruno Mars"],
+
   ["Just the Way You Are", "Bruno Mars"],
+
   ["Someone You Loved", "Lewis Capaldi"],
+
   ["Stitches", "Shawn Mendes"]
 
 ];
 
 
-/* =========================
-   변수
-========================= */
+
+/* ==================================================
+   게임 변수
+================================================== */
 
 let teams = [];
+
 let currentTeam = 0;
+
 let boardData = [];
+
 let selectedIndex = -1;
+
 let answered = false;
-let questionOpen = false;
+
 let usedCount = 0;
 
 
-/* =========================
+
+/* ==================================================
    팀 추가
-========================= */
+================================================== */
 
 function addTeam() {
 
-  const input = document.getElementById("teamInput");
+  const input =
+    document.getElementById("teamInput");
 
-  const name = input.value.trim();
+  const name =
+    input.value.trim();
 
-  if (name === "") {
+
+  if(name === "") {
+
     alert("팀 이름을 입력하세요!");
+
     return;
+
   }
 
-  if (teams.length >= 8) {
+
+  if(teams.length >= 8) {
+
     alert("최대 8팀까지 가능합니다!");
+
     return;
+
   }
+
 
   teams.push({
+
     name: name,
+
     score: 0
+
   });
+
 
   input.value = "";
 
   showTeams();
+
 }
 
 
-/* =========================
-   팀 표시
-========================= */
+
+/* ==================================================
+   팀 목록 표시
+================================================== */
 
 function showTeams() {
 
-  const list = document.getElementById("teamList");
+  const list =
+    document.getElementById("teamList");
 
   list.innerHTML = "";
 
+
   teams.forEach(function(team, index) {
 
-    const box = document.createElement("div");
+    const box =
+      document.createElement("div");
 
     box.className = "teamBox";
 
@@ -445,45 +628,61 @@ function showTeams() {
     list.appendChild(box);
 
   });
+
 }
 
 
-/* =========================
+
+/* ==================================================
+   화면 전환
+================================================== */
+
+function showScreen(screenId) {
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(function(screen) {
+
+      screen.classList.remove("active");
+
+    });
+
+
+  document
+    .getElementById(screenId)
+    .classList.add("active");
+
+
+  /* 화면이 바뀌면 맨 위로 이동 */
+
+  window.scrollTo({
+
+    top: 0,
+
+    behavior: "smooth"
+
+  });
+
+}
+
+
+
+/* ==================================================
    게임 시작
-========================= */
+================================================== */
 
 function startGame() {
 
-  if (teams.length < 2) {
+  if(teams.length < 2) {
 
     alert("최소 2팀을 추가하세요!");
 
     return;
+
   }
 
-  document.getElementById("setup").style.display = "none";
 
-  document.getElementById("game").style.display = "block";
-
-  createBoard();
-
-  updateTurn();
-
-  updateScores();
-}
-
-
-/* =========================
-   보드 생성
-========================= */
-
-function createBoard() {
-
-  const board = document.getElementById("board");
-
-  board.innerHTML = "";
-
-  boardData = [];
+  currentTeam = 0;
 
   usedCount = 0;
 
@@ -491,7 +690,32 @@ function createBoard() {
 
   answered = false;
 
-  questionOpen = false;
+
+  createBoard();
+
+  updateTurn();
+
+  updateScores();
+
+
+  showScreen("boardScreen");
+
+}
+
+
+
+/* ==================================================
+   보드 생성
+================================================== */
+
+function createBoard() {
+
+  const board =
+    document.getElementById("board");
+
+  board.innerHTML = "";
+
+  boardData = [];
 
 
   /* 35곡 */
@@ -515,15 +739,15 @@ function createBoard() {
 
   /* 꽝 5개 */
 
-  for (let i = 0; i < 5; i++) {
+  for(let i = 0; i < 5; i++) {
 
     boardData.push({
 
       type: "boom",
 
-      title: null,
+      title: "",
 
-      artist: null,
+      artist: "",
 
       used: false
 
@@ -532,31 +756,48 @@ function createBoard() {
   }
 
 
-  /* 랜덤 섞기 */
+  /* =================================================
+     전체 40개 랜덤 섞기
 
-  for (let i = boardData.length - 1; i > 0; i--) {
+     ★ 노래와 정답이 같이 움직이기 때문에
+       번호와 정답이 서로 틀어지지 않음
+  ================================================= */
+
+  for(
+    let i = boardData.length - 1;
+    i > 0;
+    i--
+  ) {
 
     const randomIndex =
-      Math.floor(Math.random() * (i + 1));
+      Math.floor(
+        Math.random() * (i + 1)
+      );
 
-    const temp = boardData[i];
 
-    boardData[i] = boardData[randomIndex];
+    const temp =
+      boardData[i];
 
-    boardData[randomIndex] = temp;
+    boardData[i] =
+      boardData[randomIndex];
+
+    boardData[randomIndex] =
+      temp;
 
   }
 
 
-  /* 40칸 만들기 */
+  /* 40개 번호 생성 */
 
-  for (let i = 0; i < 40; i++) {
+  for(let i = 0; i < 40; i++) {
 
-    const cell = document.createElement("div");
+    const cell =
+      document.createElement("div");
 
     cell.className = "cell";
 
     cell.textContent = i + 1;
+
 
     cell.onclick = function() {
 
@@ -564,223 +805,303 @@ function createBoard() {
 
     };
 
+
     board.appendChild(cell);
 
   }
+
 }
 
 
-/* =========================
+
+/* ==================================================
    번호 선택
-========================= */
+================================================== */
 
 function selectCell(index) {
 
-  /* 문제가 열려 있으면 다른 번호 선택 금지 */
+  /* 이미 답변 중이면 번호판으로 다시 못 감 */
 
-  if (questionOpen) {
+  if(selectedIndex !== -1) {
+
     return;
+
   }
 
-  if (boardData[index].used) {
+
+  if(boardData[index].used) {
+
     return;
+
   }
+
 
   selectedIndex = index;
 
-  const data = boardData[index];
+  answered = false;
+
+
+  const data =
+    boardData[index];
+
 
   data.used = true;
 
   usedCount++;
 
-  answered = false;
 
-  questionOpen = true;
+  /* 선택된 번호 회색 */
 
-  document.querySelectorAll(".cell")[index]
+  const cells =
+    document.querySelectorAll(".cell");
+
+  cells[index]
     .classList.add("used");
 
 
-  document.getElementById("questionArea")
-    .style.display = "block";
+  /* 번호 표시 */
 
-  document.getElementById("numberText")
+  document.getElementById("questionNumber")
     .textContent =
-      "🔢 " + (index + 1) + "번";
+      "🔢 " +
+      (index + 1) +
+      "번 문제";
+
+
+  /* 결과 초기화 */
 
   document.getElementById("result")
     .innerHTML = "";
+
+
+  /* 다음 버튼 숨김 */
 
   document.getElementById("nextButton")
     .style.display = "none";
 
 
-  /* 꽝 */
+  /* =================================================
+     꽝
+  ================================================= */
 
-  if (data.type === "boom") {
+  if(data.type === "boom") {
 
-    document.getElementById("youtubeButton")
-      .style.display = "none";
-
-    document.getElementById("normalArea")
+    document.getElementById("songArea")
       .style.display = "none";
 
     document.getElementById("boomArea")
-      .innerHTML =
+      .style.display = "block";
 
-      "<p style='font-size:40px;font-weight:bold;'>" +
-      "💥 꽝!" +
-      "</p>" +
-
-      "<button class='boom' onclick='boomAnswer()'>" +
-      "💥 꽝 처리 (-1점)" +
-      "</button>";
-
-    return;
   }
 
 
-  /* 노래 */
+  /* =================================================
+     노래
+  ================================================= */
 
-  document.getElementById("youtubeButton")
-    .style.display = "inline-block";
+  else {
 
-  document.getElementById("normalArea")
-    .style.display = "block";
+    document.getElementById("songArea")
+      .style.display = "block";
 
-  document.getElementById("boomArea")
-    .innerHTML = "";
+    document.getElementById("boomArea")
+      .style.display = "none";
 
-  document.getElementById("answerInput")
-    .value = "";
+    document.getElementById("answerInput")
+      .value = "";
 
-  document.getElementById("answerInput")
-    .focus();
+  }
+
+
+  /* ★ 번호판 → 답변 화면으로 이동 */
+
+  showScreen("questionScreen");
+
+
+  /* 입력칸 자동 선택 */
+
+  if(data.type === "song") {
+
+    setTimeout(function() {
+
+      document
+        .getElementById("answerInput")
+        .focus();
+
+    }, 400);
+
+  }
+
 }
 
 
-/* =========================
+
+/* ==================================================
    유튜브
-========================= */
+================================================== */
 
 function openYouTube() {
 
-  if (selectedIndex === -1) {
+  if(selectedIndex === -1) {
+
     return;
+
   }
 
-  const data = boardData[selectedIndex];
 
-  if (data.type !== "song") {
+  const data =
+    boardData[selectedIndex];
+
+
+  if(data.type !== "song") {
+
     return;
+
   }
 
-  const query =
+
+  const searchText =
     data.title +
     " " +
     data.artist +
     " official music video";
 
+
   const url =
     "https://www.youtube.com/results?search_query=" +
-    encodeURIComponent(query);
+    encodeURIComponent(searchText);
+
 
   window.open(url, "_blank");
+
 }
 
 
-/* =========================
+
+/* ==================================================
    정답 확인
-========================= */
+================================================== */
 
 function checkAnswer() {
 
-  if (answered) {
+  if(answered) {
+
     return;
+
   }
 
-  if (selectedIndex === -1) {
+
+  if(selectedIndex === -1) {
+
     return;
+
   }
 
-  const data = boardData[selectedIndex];
 
-  if (data.type !== "song") {
-    return;
-  }
+  const data =
+    boardData[selectedIndex];
+
 
   const input =
-    document.getElementById("answerInput").value.trim();
+    document
+      .getElementById("answerInput")
+      .value
+      .trim();
 
-  if (input === "") {
+
+  if(input === "") {
 
     alert("노래 제목을 입력하세요!");
 
     return;
+
   }
 
 
-  /* 대소문자와 띄어쓰기 무시 */
+  /* 대소문자 + 띄어쓰기 무시 */
 
   const userAnswer =
     normalize(input);
+
 
   const correctAnswer =
     normalize(data.title);
 
 
-  /* =========================
+  /* =================================================
      정답
-  ========================= */
+  ================================================= */
 
-  if (userAnswer === correctAnswer) {
+  if(userAnswer === correctAnswer) {
 
     teams[currentTeam].score += 2;
 
     answered = true;
 
+
     showEffect("🎉 +2점");
 
-    document.getElementById("result").innerHTML =
+
+    /* ★ 정답을 화면에 확실하게 표시 */
+
+    document.getElementById("result")
+      .innerHTML =
 
       "<div>🎉 정답!</div>" +
 
       "<div>+2점</div>" +
 
-      "<div>🎵 정답 : " +
+      "<div class='correctAnswer'>" +
+
+      "🎵 정답 : " +
+
       data.title +
+
       "</div>" +
 
-      "<div>👤 " +
+      "<div>👤 가수 : " +
+
       data.artist +
+
       "</div>";
+
 
   }
 
 
-  /* =========================
+  /* =================================================
      오답
-  ========================= */
+  ================================================= */
 
   else {
 
     answered = true;
 
+
     showEffect("❌ 0점");
 
-    document.getElementById("result").innerHTML =
+
+    /* ★ 오답이어도 정답 표시 */
+
+    document.getElementById("result")
+      .innerHTML =
 
       "<div>❌ 오답!</div>" +
 
       "<div>0점</div>" +
 
-      "<div>🎵 정답 : " +
+      "<div class='correctAnswer'>" +
+
+      "🎵 정답 : " +
+
       data.title +
+
       "</div>" +
 
-      "<div>👤 " +
+      "<div>👤 가수 : " +
+
       data.artist +
+
       "</div>";
 
   }
@@ -788,118 +1109,147 @@ function checkAnswer() {
 
   updateScores();
 
+
+  /* 다음 팀 버튼 표시 */
+
   document.getElementById("nextButton")
     .style.display = "inline-block";
+
 }
 
 
-/* =========================
+
+/* ==================================================
    정답 비교
-========================= */
+================================================== */
 
 function normalize(text) {
 
   return text
+
     .toLowerCase()
+
     .replace(/\s+/g, "");
 
 }
 
 
-/* =========================
-   꽝
-========================= */
+
+/* ==================================================
+   꽝 처리
+================================================== */
 
 function boomAnswer() {
 
-  if (answered) {
+  if(answered) {
+
     return;
+
   }
+
+
+  if(selectedIndex === -1) {
+
+    return;
+
+  }
+
 
   teams[currentTeam].score -= 1;
 
   answered = true;
 
+
   showEffect("💥 -1점");
 
-  document.getElementById("result").innerHTML =
+
+  document.getElementById("result")
+    .innerHTML =
 
     "<div>💥 꽝!</div>" +
 
     "<div>-1점</div>";
 
+
+  updateScores();
+
+
   document.getElementById("nextButton")
     .style.display = "inline-block";
 
-  updateScores();
 }
 
 
-/* =========================
+
+/* ==================================================
    다음 팀
-========================= */
+================================================== */
 
-function nextTurn() {
+function goNextTurn() {
 
-  document.getElementById("questionArea")
-    .style.display = "none";
+  /* 게임이 끝났으면 종료 화면 */
 
-  document.getElementById("answerInput")
-    .value = "";
+  if(usedCount >= 40) {
 
-  document.getElementById("boomArea")
-    .innerHTML = "";
+    endGame();
 
-  document.getElementById("result")
-    .innerHTML = "";
+    return;
 
-  document.getElementById("nextButton")
-    .style.display = "none";
+  }
+
+
+  /* 다음 팀 */
+
+  currentTeam++;
+
+
+  if(currentTeam >= teams.length) {
+
+    currentTeam = 0;
+
+  }
+
+
+  /* 선택 초기화 */
 
   selectedIndex = -1;
 
   answered = false;
 
-  questionOpen = false;
-
-
-  currentTeam++;
-
-  if (currentTeam >= teams.length) {
-    currentTeam = 0;
-  }
 
   updateTurn();
 
 
-  /* 게임 종료 */
+  /* ★ 답변 화면 → 번호판 화면으로 돌아감 */
 
-  if (usedCount >= 40) {
+  showScreen("boardScreen");
 
-    endGame();
-
-  }
 }
 
 
-/* =========================
-   현재 팀
-========================= */
+
+/* ==================================================
+   현재 팀 표시
+================================================== */
 
 function updateTurn() {
 
-  document.getElementById("turn")
+  document.getElementById("turnText")
     .textContent =
+
       "🎯 현재 차례 : " +
+
       teams[currentTeam].name +
+
       "팀";
 
 }
 
 
-/* =========================
+
+/* ==================================================
    점수판
-========================= */
+================================================== */
 
 function updateScores() {
 
@@ -908,6 +1258,7 @@ function updateScores() {
 
   scores.innerHTML = "";
 
+
   teams.forEach(function(team) {
 
     const row =
@@ -915,33 +1266,35 @@ function updateScores() {
 
     row.className = "scoreRow";
 
+
     row.innerHTML =
 
       "<span>👥 " +
+
       team.name +
+
       "</span>" +
 
       "<strong>" +
+
       team.score +
+
       "점</strong>";
+
 
     scores.appendChild(row);
 
   });
+
 }
 
 
-/* =========================
+
+/* ==================================================
    게임 종료
-========================= */
+================================================== */
 
 function endGame() {
-
-  document.getElementById("questionArea")
-    .style.display = "none";
-
-  document.getElementById("gameEnd")
-    .style.display = "block";
 
   const sortedTeams =
     [...teams].sort(function(a, b) {
@@ -951,64 +1304,84 @@ function endGame() {
     });
 
 
-  let result = "";
+  if(sortedTeams.length > 0) {
 
-  if (sortedTeams.length > 0) {
+    document.getElementById("winner")
+      .innerHTML =
 
-    result +=
+      "<h2>🥇 우승팀</h2>" +
 
-      "<h2>🥇 우승팀 : " +
+      "<h1>" +
+
       sortedTeams[0].name +
-      "팀</h2>" +
+
+      "팀</h1>" +
 
       "<h2>" +
+
       sortedTeams[0].score +
+
       "점</h2>";
 
   }
 
 
-  result += "<h3>최종 점수</h3>";
+  let finalText =
+    "<h2>🏆 최종 점수</h2>";
 
 
   sortedTeams.forEach(function(team, index) {
 
-    result +=
+    finalText +=
 
       (index + 1) +
-      "위 - " +
+
+      "위　" +
+
       team.name +
-      "팀 : " +
+
+      "팀　" +
+
       team.score +
+
       "점<br>";
 
   });
 
 
-  document.getElementById("winnerText")
-    .innerHTML = result;
+  document.getElementById("finalScores")
+    .innerHTML = finalText;
+
+
+  showScreen("endScreen");
+
 }
 
 
-/* =========================
-   큰 효과
-========================= */
+
+/* ==================================================
+   큰 점수 효과
+================================================== */
 
 function showEffect(text) {
 
   const effect =
     document.getElementById("effect");
 
+
   effect.textContent = text;
 
   effect.style.display = "flex";
+
 
   setTimeout(function() {
 
     effect.style.display = "none";
 
-  }, 900);
+  }, 800);
+
 }
+
 
 </script>
 
