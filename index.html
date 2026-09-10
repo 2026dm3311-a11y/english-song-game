@@ -1,9 +1,9 @@
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>🎵 POP SONG QUIZ</title>
 
 <style>
@@ -151,10 +151,11 @@ button:hover {
 }
 
 #result {
-  min-height: 50px;
+  min-height: 80px;
   margin: 20px;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: bold;
+  line-height: 1.6;
 }
 
 #scoreboard {
@@ -187,8 +188,17 @@ button:hover {
   font-weight: bold;
 }
 
-@media(max-width:700px) {
+#gameEnd {
+  display: none;
+  background: white;
+  max-width: 650px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 3px 12px #ccc;
+}
 
+@media(max-width:700px) {
   #board {
     grid-template-columns: repeat(5, 1fr);
   }
@@ -207,11 +217,7 @@ button:hover {
 
 <body>
 
-
-<!-- =========================
-     시작 화면
-========================= -->
-
+<!-- 시작 화면 -->
 <div class="setup" id="setup">
 
   <h1>🎵 POP SONG QUIZ 🎵</h1>
@@ -245,11 +251,7 @@ button:hover {
 </div>
 
 
-
-<!-- =========================
-     게임 화면
-========================= -->
-
+<!-- 게임 화면 -->
 <div class="game" id="game">
 
   <h1>🎵 POP SONG QUIZ 🎵</h1>
@@ -260,13 +262,9 @@ button:hover {
 
 
   <!-- 문제 영역 -->
-
   <div id="questionArea">
 
     <h2 id="numberText"></h2>
-
-
-    <!-- 유튜브 버튼 -->
 
     <button
       class="youtube"
@@ -278,7 +276,6 @@ button:hover {
 
 
     <!-- 일반 문제 -->
-
     <div id="normalArea">
 
       <br>
@@ -303,17 +300,14 @@ button:hover {
 
 
     <!-- 꽝 -->
-
     <div id="boomArea"></div>
 
 
     <!-- 결과 -->
-
     <div id="result"></div>
 
 
     <!-- 다음 팀 -->
-
     <button
       class="next"
       id="nextButton"
@@ -326,10 +320,7 @@ button:hover {
   </div>
 
 
-  <!-- =========================
-       점수판
-  ========================= -->
-
+  <!-- 점수판 -->
   <div id="scoreboard">
 
     <h2>🏆 점수판</h2>
@@ -338,181 +329,127 @@ button:hover {
 
   </div>
 
+
+  <!-- 게임 종료 -->
+  <div id="gameEnd">
+
+    <h2>🏆 게임 종료!</h2>
+
+    <div id="winnerText"></div>
+
+  </div>
+
 </div>
 
 
-
-<!-- =========================
-     큰 점수 효과
-========================= -->
-
+<!-- 큰 점수 효과 -->
 <div id="effect"></div>
-
 
 
 <script>
 
-
-/* =====================================================
+/* =========================
    35곡
-===================================================== */
+========================= */
 
 const songs = [
 
   ["Shape of You", "Ed Sheeran"],
-
   ["Believer", "Imagine Dragons"],
-
   ["Counting Stars", "OneRepublic"],
-
   ["Perfect", "Ed Sheeran"],
-
   ["Love Yourself", "Justin Bieber"],
-
   ["Sorry", "Justin Bieber"],
-
   ["What Makes You Beautiful", "One Direction"],
-
   ["Sugar", "Maroon 5"],
-
   ["Girls Like You", "Maroon 5"],
-
   ["Memories", "Maroon 5"],
-
   ["Attention", "Charlie Puth"],
-
   ["We Don't Talk Anymore", "Charlie Puth"],
-
   ["See You Again", "Wiz Khalifa"],
-
   ["Stay", "The Kid LAROI & Justin Bieber"],
-
   ["Dance Monkey", "Tones and I"],
-
   ["Bad Guy", "Billie Eilish"],
-
   ["As It Was", "Harry Styles"],
-
   ["Watermelon Sugar", "Harry Styles"],
-
   ["Blinding Lights", "The Weeknd"],
-
   ["Save Your Tears", "The Weeknd"],
-
   ["Levitating", "Dua Lipa"],
-
   ["New Rules", "Dua Lipa"],
-
   ["Don't Start Now", "Dua Lipa"],
-
   ["Havana", "Camila Cabello"],
-
   ["Senorita", "Shawn Mendes & Camila Cabello"],
-
   ["Cheap Thrills", "Sia"],
-
   ["Roar", "Katy Perry"],
-
   ["Firework", "Katy Perry"],
-
   ["Shake It Off", "Taylor Swift"],
-
   ["Blank Space", "Taylor Swift"],
-
   ["Anti-Hero", "Taylor Swift"],
-
   ["Uptown Funk", "Mark Ronson ft. Bruno Mars"],
-
   ["Just the Way You Are", "Bruno Mars"],
-
   ["Someone You Loved", "Lewis Capaldi"],
-
   ["Stitches", "Shawn Mendes"]
 
 ];
 
 
-
-/* =====================================================
+/* =========================
    게임 변수
-===================================================== */
+========================= */
 
 let teams = [];
-
 let currentTeam = 0;
-
 let boardData = [];
-
 let selectedIndex = -1;
-
 let answered = false;
+let questionOpen = false;
+let usedCount = 0;
 
 
-
-/* =====================================================
+/* =========================
    팀 추가
-===================================================== */
+========================= */
 
 function addTeam() {
 
-  const input =
-    document.getElementById("teamInput");
+  const input = document.getElementById("teamInput");
 
-  const name =
-    input.value.trim();
-
+  const name = input.value.trim();
 
   if(name === "") {
-
     alert("팀 이름을 입력하세요!");
-
     return;
-
   }
-
 
   if(teams.length >= 8) {
-
     alert("최대 8팀까지 가능합니다!");
-
     return;
-
   }
 
-
   teams.push({
-
     name: name,
-
     score: 0
-
   });
-
 
   input.value = "";
 
   showTeams();
-
 }
 
 
-
-/* =====================================================
+/* =========================
    팀 표시
-===================================================== */
+========================= */
 
 function showTeams() {
 
-  const list =
-    document.getElementById("teamList");
+  const list = document.getElementById("teamList");
 
   list.innerHTML = "";
 
-
   teams.forEach(function(team, index) {
 
-    const box =
-      document.createElement("div");
+    const box = document.createElement("div");
 
     box.className = "teamBox";
 
@@ -525,14 +462,12 @@ function showTeams() {
     list.appendChild(box);
 
   });
-
 }
 
 
-
-/* =====================================================
+/* =========================
    게임 시작
-===================================================== */
+========================= */
 
 function startGame() {
 
@@ -541,59 +476,49 @@ function startGame() {
     alert("최소 2팀을 추가하세요!");
 
     return;
-
   }
 
+  document.getElementById("setup").style.display = "none";
 
-  document.getElementById("setup")
-    .style.display = "none";
-
-
-  document.getElementById("game")
-    .style.display = "block";
-
+  document.getElementById("game").style.display = "block";
 
   createBoard();
 
   updateTurn();
 
   updateScores();
-
 }
 
 
-
-/* =====================================================
+/* =========================
    보드 생성
-
-   35곡 + 꽝 5개를 하나의 배열에 넣고
-   배열 전체를 랜덤으로 섞는다.
-
-   ★ 번호와 정답이 절대 따로 섞이지 않음 ★
-===================================================== */
+========================= */
 
 function createBoard() {
 
-  const board =
-    document.getElementById("board");
+  const board = document.getElementById("board");
 
   board.innerHTML = "";
 
   boardData = [];
 
+  usedCount = 0;
 
-  /* 35곡 추가 */
+  selectedIndex = -1;
 
+  answered = false;
+
+  questionOpen = false;
+
+
+  // 35곡 추가
   songs.forEach(function(song) {
 
     boardData.push({
 
       type: "song",
-
       title: song[0],
-
       artist: song[1],
-
       used: false
 
     });
@@ -601,18 +526,14 @@ function createBoard() {
   });
 
 
-  /* 꽝 5개 추가 */
-
+  // 꽝 5개 추가
   for(let i = 0; i < 5; i++) {
 
     boardData.push({
 
       type: "boom",
-
       title: null,
-
       artist: null,
-
       used: false
 
     });
@@ -620,41 +541,29 @@ function createBoard() {
   }
 
 
-  /* =================================================
-     40개 전체 랜덤 섞기
-  ================================================= */
-
+  // 40개 전체 랜덤 섞기
   for(let i = boardData.length - 1; i > 0; i--) {
 
     const randomIndex =
       Math.floor(Math.random() * (i + 1));
 
+    const temp = boardData[i];
 
-    const temp =
-      boardData[i];
+    boardData[i] = boardData[randomIndex];
 
-
-    boardData[i] =
-      boardData[randomIndex];
-
-
-    boardData[randomIndex] =
-      temp;
+    boardData[randomIndex] = temp;
 
   }
 
 
-  /* 40개 번호 만들기 */
-
+  // 40개 번호 만들기
   for(let i = 0; i < 40; i++) {
 
-    const cell =
-      document.createElement("div");
+    const cell = document.createElement("div");
 
     cell.className = "cell";
 
     cell.textContent = i + 1;
-
 
     cell.onclick = function() {
 
@@ -662,149 +571,102 @@ function createBoard() {
 
     };
 
-
     board.appendChild(cell);
 
   }
-
 }
 
 
-
-/* =====================================================
+/* =========================
    번호 선택
-===================================================== */
+========================= */
 
 function selectCell(index) {
 
-  if(answered) {
-
+  // 이미 문제가 열려 있으면 다른 번호 선택 불가
+  if(questionOpen) {
     return;
-
   }
-
 
   if(boardData[index].used) {
-
     return;
-
   }
-
 
   selectedIndex = index;
 
-
-  const data =
-    boardData[index];
-
+  const data = boardData[index];
 
   data.used = true;
 
+  usedCount++;
 
-  const cells =
-    document.querySelectorAll(".cell");
+  questionOpen = true;
 
+  answered = false;
+
+  const cells = document.querySelectorAll(".cell");
 
   cells[index].classList.add("used");
 
 
-  document.getElementById("questionArea")
-    .style.display = "block";
+  document.getElementById("questionArea").style.display = "block";
+
+  document.getElementById("numberText").textContent =
+    "🔢 " + (index + 1) + "번";
+
+  document.getElementById("result").textContent = "";
+
+  document.getElementById("nextButton").style.display = "none";
 
 
-  document.getElementById("numberText")
-    .textContent =
-      "🔢 " + (index + 1) + "번";
-
-
-  document.getElementById("result")
-    .textContent = "";
-
-
-  document.getElementById("nextButton")
-    .style.display = "none";
-
-
-  /* 꽝인 경우 */
-
+  // 꽝
   if(data.type === "boom") {
 
-    document.getElementById("youtubeButton")
-      .style.display = "none";
+    document.getElementById("youtubeButton").style.display = "none";
 
+    document.getElementById("normalArea").style.display = "none";
 
-    document.getElementById("normalArea")
-      .style.display = "none";
+    document.getElementById("boomArea").innerHTML =
 
-
-    document.getElementById("boomArea")
-      .innerHTML =
-
-      "<p style='font-size:40px;font-weight:bold;'>" +
-      "💥 꽝!" +
-      "</p>" +
+      "<p style='font-size:40px;font-weight:bold;'>💥 꽝!</p>" +
 
       "<button class='boom' onclick='boomAnswer()'>" +
       "💥 꽝 처리 (-1점)" +
       "</button>";
 
-
     return;
-
   }
 
 
-  /* 노래인 경우 */
+  // 노래
+  document.getElementById("youtubeButton").style.display = "inline-block";
 
-  document.getElementById("youtubeButton")
-    .style.display = "inline-block";
+  document.getElementById("normalArea").style.display = "block";
 
+  document.getElementById("boomArea").innerHTML = "";
 
-  document.getElementById("normalArea")
-    .style.display = "block";
+  document.getElementById("answerInput").value = "";
 
-
-  document.getElementById("boomArea")
-    .innerHTML = "";
-
-
-  document.getElementById("answerInput")
-    .value = "";
-
-
-  document.getElementById("answerInput")
-    .focus();
+  document.getElementById("answerInput").focus();
 
 }
 
 
-
-/* =====================================================
-   유튜브 연결
-
-   선택된 번호의 정확한 노래 제목 + 가수로
-   유튜브 검색을 열어준다.
-===================================================== */
+/* =========================
+   유튜브 검색
+========================= */
 
 function openYouTube() {
 
   if(selectedIndex === -1) {
-
     return;
-
   }
 
-
-  const data =
-    boardData[selectedIndex];
-
+  const data = boardData[selectedIndex];
 
   if(data.type !== "song") {
-
     return;
-
   }
-
 
   const query =
     data.title +
@@ -812,275 +674,220 @@ function openYouTube() {
     data.artist +
     " official music video";
 
-
   const url =
     "https://www.youtube.com/results?search_query=" +
     encodeURIComponent(query);
 
-
   window.open(url, "_blank");
-
 }
 
 
-
-/* =====================================================
+/* =========================
    정답 확인
-===================================================== */
+========================= */
 
 function checkAnswer() {
 
   if(answered) {
-
     return;
-
   }
-
 
   if(selectedIndex === -1) {
-
     return;
-
   }
 
-
-  const data =
-    boardData[selectedIndex];
-
+  const data = boardData[selectedIndex];
 
   if(data.type !== "song") {
-
     return;
-
   }
 
-
   const input =
-    document.getElementById("answerInput")
-      .value;
-
+    document.getElementById("answerInput").value;
 
   if(input.trim() === "") {
 
     alert("노래 제목을 입력하세요!");
 
     return;
-
   }
 
 
-  /* =================================================
-     ★ 핵심 정답 판정 ★
+  // 대소문자 + 띄어쓰기 무시
+  const userAnswer = normalize(input);
 
-     대문자/소문자 무시
-     띄어쓰기 무시
-  ================================================= */
-
-  const userAnswer =
-    normalize(input);
+  const correctAnswer = normalize(data.title);
 
 
-  const correctAnswer =
-    normalize(data.title);
-
-
+  // 정답
   if(userAnswer === correctAnswer) {
-
-    /* 정답 +2 */
 
     teams[currentTeam].score += 2;
 
     answered = true;
 
-
     showEffect("🎉 +2점");
 
+    document.getElementById("result").innerHTML =
 
-    document.getElementById("result")
-      .innerHTML =
-      "🎉 정답! <strong>+2점</strong>";
+      "🎉 정답! <strong>+2점</strong><br>" +
+
+      "🎵 정답: <strong>" +
+      data.title +
+      "</strong><br>" +
+
+      "👤 가수: " +
+      data.artist;
 
   }
 
+  // 오답
   else {
-
-    /* 오답 0 */
 
     answered = true;
 
-
     showEffect("❌ 0점");
 
+    document.getElementById("result").innerHTML =
 
-    document.getElementById("result")
-      .innerHTML =
-      "❌ 오답! <strong>0점</strong>";
+      "❌ 오답! <strong>0점</strong><br>" +
+
+      "🎵 정답: <strong>" +
+      data.title +
+      "</strong><br>" +
+
+      "👤 가수: " +
+      data.artist;
 
   }
 
 
   updateScores();
 
-
-  document.getElementById("nextButton")
-    .style.display = "inline-block";
-
+  document.getElementById("nextButton").style.display =
+    "inline-block";
 }
 
 
-
-/* =====================================================
-   정답 비교 함수
-
-   ★ 대문자/소문자 무시
-   ★ 띄어쓰기 무시
-
-   예:
-   Shape of You
-   shapeofyou
-   SHAPE OF YOU
-
-   모두 같은 것으로 인식
-===================================================== */
+/* =========================
+   정답 비교
+========================= */
 
 function normalize(text) {
 
   return text
-
     .toLowerCase()
-
     .replace(/\s+/g, "")
-
     .trim();
 
 }
 
 
-
-/* =====================================================
+/* =========================
    꽝 처리
-===================================================== */
+========================= */
 
 function boomAnswer() {
 
   if(answered) {
-
     return;
-
   }
-
 
   teams[currentTeam].score -= 1;
 
-
   answered = true;
-
 
   showEffect("💥 -1점");
 
+  document.getElementById("result").innerHTML =
 
-  document.getElementById("result")
-    .innerHTML =
     "💥 꽝! <strong>-1점</strong>";
 
-
-  document.getElementById("nextButton")
-    .style.display = "inline-block";
-
+  document.getElementById("nextButton").style.display =
+    "inline-block";
 
   updateScores();
-
 }
 
 
-
-/* =====================================================
+/* =========================
    다음 팀
-===================================================== */
+========================= */
 
 function nextTurn() {
 
-  document.getElementById("questionArea")
-    .style.display = "none";
+  document.getElementById("questionArea").style.display = "none";
 
+  document.getElementById("answerInput").value = "";
 
-  document.getElementById("answerInput")
-    .value = "";
+  document.getElementById("boomArea").innerHTML = "";
 
+  document.getElementById("result").textContent = "";
 
-  document.getElementById("boomArea")
-    .innerHTML = "";
-
-
-  document.getElementById("result")
-    .textContent = "";
-
+  document.getElementById("nextButton").style.display = "none";
 
   selectedIndex = -1;
 
   answered = false;
 
+  questionOpen = false;
 
-  /* 자동 팀 순서 */
 
+  // 자동 팀 순서
   currentTeam++;
 
-
   if(currentTeam >= teams.length) {
-
     currentTeam = 0;
-
   }
 
 
   updateTurn();
 
+
+  // 40칸 모두 사용
+  if(usedCount >= 40) {
+
+    endGame();
+
+  }
+
 }
 
 
-
-/* =====================================================
+/* =========================
    현재 팀 표시
-===================================================== */
+========================= */
 
 function updateTurn() {
 
-  document.getElementById("turn")
-    .textContent =
-      "🎯 현재 차례 : " +
-      teams[currentTeam].name +
-      "팀";
+  document.getElementById("turn").textContent =
+
+    "🎯 현재 차례 : " +
+    teams[currentTeam].name +
+    "팀";
 
 }
 
 
-
-/* =====================================================
+/* =========================
    점수판
-===================================================== */
+========================= */
 
 function updateScores() {
 
-  const scores =
-    document.getElementById("scores");
-
+  const scores = document.getElementById("scores");
 
   scores.innerHTML = "";
 
+  teams.forEach(function(team) {
 
-  teams.forEach(function(team, index) {
-
-    const row =
-      document.createElement("div");
-
+    const row = document.createElement("div");
 
     row.className = "scoreRow";
 
-
     row.innerHTML =
 
-      "<span>" +
-      "👥 " +
+      "<span>👥 " +
       team.name +
       "</span>" +
 
@@ -1089,30 +896,69 @@ function updateScores() {
       "점" +
       "</strong>";
 
-
     scores.appendChild(row);
 
   });
+}
+
+
+/* =========================
+   게임 종료
+========================= */
+
+function endGame() {
+
+  document.getElementById("questionArea").style.display = "none";
+
+  document.getElementById("gameEnd").style.display = "block";
+
+  let sortedTeams = [...teams].sort(function(a, b) {
+    return b.score - a.score;
+  });
+
+  let text = "";
+
+  if(sortedTeams.length > 0) {
+
+    text +=
+      "🥇 우승 : <strong>" +
+      sortedTeams[0].name +
+      "팀</strong><br>" +
+      sortedTeams[0].score +
+      "점<br><br>";
+
+  }
+
+  text += "<h3>최종 점수</h3>";
+
+  sortedTeams.forEach(function(team, index) {
+
+    text +=
+      (index + 1) +
+      "위 - " +
+      team.name +
+      "팀 : " +
+      team.score +
+      "점<br>";
+
+  });
+
+  document.getElementById("winnerText").innerHTML = text;
 
 }
 
 
-
-/* =====================================================
+/* =========================
    큰 점수 효과
-===================================================== */
+========================= */
 
 function showEffect(text) {
 
-  const effect =
-    document.getElementById("effect");
-
+  const effect = document.getElementById("effect");
 
   effect.textContent = text;
 
-
   effect.style.display = "flex";
-
 
   setTimeout(function() {
 
@@ -1126,3 +972,4 @@ function showEffect(text) {
 
 </body>
 </html>
+```
